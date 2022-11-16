@@ -9,16 +9,25 @@ public class Ball : MonoBehaviour
     [SerializeField] float saveDelay = 0.2f;
     [SerializeField] float _moveSpeed = 5f;
     bool nextSave = true;
- 
-    Rigidbody2D rb;
-    Vector2 dir;
+    
+    Rigidbody2D _ballRB;
     
     Dragger dragger;
-    
+    public float animationDuration = 0.5f;
+    void OnEnable()
+    {
+        EventManager.onClickBall += BallAnimationStart;
+        EventManager.onClickBall += BallAnimationStop;
+    }
+    void OnDisable()
+    {
+        EventManager.onClickBall -= BallAnimationStart;
+        EventManager.onClickBall -= BallAnimationStop;
+    }
     void Start()
     {
         lastPosition = transform.position;
-        rb = GetComponent<Rigidbody2D>();
+        _ballRB = GetComponent<Rigidbody2D>();
         dragger = GetComponent<Dragger>();
     }
     
@@ -26,13 +35,14 @@ public class Ball : MonoBehaviour
     {
         if (nextSave)
         {
-            StartCoroutine("SavePosition");
+            StartCoroutine("SaveLastPosition");
         }
     }
 
     void OnMouseUp()
     {
         dragger.canBePushed = true;
+        BallAnimationStop();
     }
     
     void FixedUpdate()
@@ -40,11 +50,11 @@ public class Ball : MonoBehaviour
         if (dragger.canBePushed)
         {
             dragger.canBePushed = false;
-            rb.velocity = (dragger.GetMousePosition() - transform.position) * _moveSpeed;
+            _ballRB.velocity = (dragger.GetMousePosition() - transform.position) * _moveSpeed;
         }
     }
  
-    IEnumerator SavePosition()
+    IEnumerator SaveLastPosition()
     {
         if(dragger.canBePushed)
         {
@@ -55,4 +65,16 @@ public class Ball : MonoBehaviour
         }
         
     }
+
+    void BallAnimationStart()
+    {
+        transform.DOScaleY(0.02f,animationDuration).SetEase(Ease.InOutBounce).SetLoops(-1,LoopType.Yoyo);
+        Debug.Log("Ball event worked");
+    }
+
+    void BallAnimationStop()
+    {
+        transform.DOScaleY(0.017f,0.5f).SetEase(Ease.InOutBounce);
+    }
+
 }

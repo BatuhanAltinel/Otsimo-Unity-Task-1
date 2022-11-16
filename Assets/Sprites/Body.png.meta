@@ -107,7 +107,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones:
-    - name: bone_1
+    - name: Armature
       guid: 827fcd0fbf51d7a46a9b6821ea1f9eae
       position: {x: 140.71147, y: 208.95525, z: -2}
       rotation: {x: 0, y: 0, z: 0.6359203, w: 0.77175474}
@@ -116,7 +116,7 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4278190335
-    - name: bone_2
+    - name: Stomach
       guid: 5adf79e7812877b458d4cac2ec704deb
       position: {x: 62.445705, y: 0.0000040730974, z: -1}
       rotation: {x: 0, y: 0, z: 0.023189507, w: 0.9997311}
@@ -125,7 +125,7 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4278255615
-    - name: bone_3
+    - name: Chest
       guid: 03e6013af661ae64fb0bfbf0a0853da5
       position: {x: 54.71147, y: -0.00000984175, z: -2}
       rotation: {x: 0, y: 0, z: 0.013586615, w: 0.99990773}
@@ -134,43 +134,43 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4278255360
-    - name: bone_4
+    - name: Left Shoulder
       guid: 8e4a116742495fe42804afc15cc80b4f
       position: {x: 22.924486, y: 27.910465, z: 0}
-      rotation: {x: 0, y: -0, z: 0.91265607, w: 0.4087284}
-      length: 38.369125
+      rotation: {x: 0, y: -0, z: 0.91265625, w: 0.40872812}
+      length: 38.3691
       parentId: 2
       color:
         serializedVersion: 2
         rgba: 4294967040
-    - name: bone_5
+    - name: Left arm
       guid: 0640336533954d445bfd3db127dc35ac
-      position: {x: 38.369106, y: 0.000014821027, z: -1}
+      position: {x: 38.3691, y: -0.000017123959, z: -1}
       rotation: {x: 0, y: 0, z: 0.04258837, w: 0.9990927}
       length: 54.539856
       parentId: 3
       color:
         serializedVersion: 2
         rgba: 4294901760
-    - name: bone_6
+    - name: right shoulder
       guid: 9544db40432cc2d41b2f716d58add2f5
       position: {x: 20.373682, y: -29.634308, z: 0}
-      rotation: {x: 0, y: -0, z: -0.9090712, w: 0.4166408}
-      length: 37.75031
+      rotation: {x: 0, y: -0, z: -0.90907115, w: 0.41664088}
+      length: 37.750324
       parentId: 2
       color:
         serializedVersion: 2
         rgba: 4294902015
-    - name: bone_7
+    - name: right arm
       guid: 9e4ca4c855cdb4a47a61678354add6b6
-      position: {x: 37.75032, y: 0.000018982355, z: 0}
-      rotation: {x: 0, y: 0, z: -0.09549551, w: 0.9954299}
-      length: 45.73486
+      position: {x: 37.750362, y: 0.00003543882, z: 0}
+      rotation: {x: 0, y: 0, z: -0.09549566, w: 0.9954299}
+      length: 45.734863
       parentId: 5
       color:
         serializedVersion: 2
         rgba: 4278223103
-    - name: bone_8
+    - name: Left leg
       guid: 55aacfc550b241f49b5df73d0b8bd0a7
       position: {x: -22.516954, y: 23.998, z: 0}
       rotation: {x: 0, y: -0, z: 0.999803, w: 0.019848313}
@@ -179,16 +179,16 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4278255488
-    - name: bone_9
+    - name: left ankle
       guid: bf7deaa035af9c94785f3e72bcda57b1
       position: {x: 44.98678, y: -0.00002658478, z: 0}
       rotation: {x: 0, y: 0, z: -0.016655331, w: 0.9998613}
-      length: 30.33418
+      length: 30.33419
       parentId: 7
       color:
         serializedVersion: 2
         rgba: 4286643968
-    - name: bone_10
+    - name: right leg
       guid: 57100ecec2999fd4aa9fe72130289797
       position: {x: -9.518169, y: -30.238594, z: 0}
       rotation: {x: 0, y: -0, z: -0.8730204, w: 0.48768365}
@@ -197,7 +197,7 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4294934528
-    - name: bone_11
+    - name: right ankle
       guid: 9d74b0b6f50cd8f47a9c93c41e13e144
       position: {x: 41.12415, y: 0.00000974702, z: 0}
       rotation: {x: 0, y: 0, z: -0.0675972, w: 0.99771273}
@@ -206,7 +206,7 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4294901888
-    - name: bone_13
+    - name: Head
       guid: 8586ba423b8294340ab1292048b25924
       position: {x: 75.744484, y: 2.1390626, z: 0}
       rotation: {x: 0, y: 0, z: 0.0036320598, w: 0.99999344}
@@ -215,37 +215,37 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4278255615
-    - name: bone_14
+    - name: right hand
       guid: 6e0e00aec0b2ca0488f1e47b2a315561
-      position: {x: 45.73485, y: 0.0000074383934, z: 0}
-      rotation: {x: 0, y: 0, z: 0.21171674, w: 0.97733116}
+      position: {x: 45.73484, y: -0.000017647604, z: 0}
+      rotation: {x: 0, y: 0, z: 0.21171673, w: 0.9773311}
       length: 65.35112
       parentId: 6
       color:
         serializedVersion: 2
         rgba: 4278255360
-    - name: bone_15
+    - name: left hand
       guid: b2b8964c8609a63469325348f11b65a3
-      position: {x: 54.539852, y: 0.0000029518628, z: 0}
-      rotation: {x: 0, y: 0, z: 0.2857719, w: 0.9582977}
+      position: {x: 54.539852, y: -0.00002101771, z: 0}
+      rotation: {x: 0, y: 0, z: 0.28577167, w: 0.9582978}
       length: 73.923874
       parentId: 4
       color:
         serializedVersion: 2
         rgba: 4294967040
-    - name: bone_16
+    - name: left feet
       guid: af9e5f24c34bce142a9c3c1b35fd0920
-      position: {x: 30.334187, y: 0.0000063265006, z: 0}
+      position: {x: 30.334194, y: 0.000008327706, z: 0}
       rotation: {x: 0, y: 0, z: -0.17891179, w: 0.98386514}
       length: 112.894585
       parentId: 8
       color:
         serializedVersion: 2
         rgba: 4294901760
-    - name: bone_17
+    - name: right feet
       guid: 47f6487310be6554eaaf782ddaa59864
       position: {x: 52.454704, y: -0.000003968708, z: 0}
-      rotation: {x: 0, y: 0, z: -0.20497501, w: 0.9787673}
+      rotation: {x: 0, y: 0, z: -0.20497495, w: 0.9787673}
       length: 110.107124
       parentId: 10
       color:
@@ -852,7 +852,7 @@ TextureImporter:
       boneIndex[1]: 0
       boneIndex[2]: 0
       boneIndex[3]: 0
-    - weight[0]: 0.60203445
+    - weight[0]: 0.6020344
       weight[1]: 0.3979656
       weight[2]: 0
       weight[3]: 0
@@ -901,7 +901,7 @@ TextureImporter:
       boneIndex[2]: 0
       boneIndex[3]: 0
     - weight[0]: 0.6723955
-      weight[1]: 0.3276045
+      weight[1]: 0.32760447
       weight[2]: 0
       weight[3]: 0
       boneIndex[0]: 0
@@ -917,7 +917,7 @@ TextureImporter:
       boneIndex[2]: 0
       boneIndex[3]: 0
     - weight[0]: 0.9831063
-      weight[1]: 0.016893713
+      weight[1]: 0.016893685
       weight[2]: 0
       weight[3]: 0
       boneIndex[0]: 0
