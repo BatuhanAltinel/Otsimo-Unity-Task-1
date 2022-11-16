@@ -28,6 +28,7 @@ public class Body : MonoBehaviour
 
     void Update()
     {
+        BoundaryCheck();
         if(nextSave)
         {
             StartCoroutine(Save_LastPosition());
@@ -50,14 +51,17 @@ public class Body : MonoBehaviour
         _bodySpring.connectedAnchor = cursorPosition;
     }
 
+    void OnMouseUp()
+    {
+        IdleAnimation();
+    }
+    
     void BodyAnimationController()
     {
         if((_lastPosition.x - transform.position.x) < 0)
             MoveLeftAnimation();
         else if((_lastPosition.x - transform.position.x) > 0)
             MoveRightAnimation();
-        else
-            IdleAnimation();
     }
 
     public void MoveRightAnimation()
@@ -93,8 +97,19 @@ public class Body : MonoBehaviour
     {
         nextSave = false;
         _lastPosition = transform.position;
-        yield return new WaitForSeconds(0.05f);
+        yield return new WaitForEndOfFrame();
         nextSave = true;
     }
 
+    void BoundaryCheck()
+    {
+        if(transform.position.x > 2.2f)
+            transform.position = new Vector2(2.2f, transform.position.y);
+        if(transform.position.x < -2.2f)
+            transform.position = new Vector2(-2.2f, transform.position.y);
+        if(transform.position.y > 4.2f)
+            transform.position = new Vector2(transform.position.x,4.2f);
+        if(transform.position.y < -4.2f)
+            transform.position = new Vector2(transform.position.x,-4.2f);
+    }
 }

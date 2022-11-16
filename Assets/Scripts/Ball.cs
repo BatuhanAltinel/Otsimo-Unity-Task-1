@@ -17,12 +17,10 @@ public class Ball : MonoBehaviour
     void OnEnable()
     {
         EventManager.onClickBall += BallAnimationStart;
-        EventManager.onClickBall += BallAnimationStop;
     }
     void OnDisable()
     {
         EventManager.onClickBall -= BallAnimationStart;
-        EventManager.onClickBall -= BallAnimationStop;
     }
     void Start()
     {
@@ -33,6 +31,7 @@ public class Ball : MonoBehaviour
     
     void Update()
     {
+        BoundaryCheck();
         if (nextSave)
         {
             StartCoroutine("SaveLastPosition");
@@ -41,7 +40,6 @@ public class Ball : MonoBehaviour
 
     void OnMouseUp()
     {
-        dragger.canBePushed = true;
         BallAnimationStop();
     }
     
@@ -68,13 +66,23 @@ public class Ball : MonoBehaviour
 
     void BallAnimationStart()
     {
-        transform.DOScaleY(0.02f,animationDuration).SetEase(Ease.InOutBounce).SetLoops(-1,LoopType.Yoyo);
-        Debug.Log("Ball event worked");
+        transform.DOScaleY(0.017f,animationDuration).SetEase(Ease.InOutBounce);
     }
 
     void BallAnimationStop()
     {
-        transform.DOScaleY(0.017f,0.5f).SetEase(Ease.InOutBounce);
+        transform.DOScaleY(0.02f,animationDuration).SetEase(Ease.InOutBounce);
     }
 
+    void BoundaryCheck()
+    {
+        if(transform.position.x > 2.3f)
+            transform.position = new Vector2(2.3f, transform.position.y);
+        if(transform.position.x < -2.3f)
+            transform.position = new Vector2(-2.3f, transform.position.y);
+        if(transform.position.y > 4.5f)
+            transform.position = new Vector2(transform.position.x,4.5f);
+        if(transform.position.y < -4.5f)
+            transform.position = new Vector2(transform.position.x,-4.5f);
+    }
 }
