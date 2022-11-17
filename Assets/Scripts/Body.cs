@@ -4,34 +4,35 @@ using UnityEngine;
 
 public class Body : MonoBehaviour
 {
-    SpringJoint2D _bodySpring;
-
-    Animator anim;
-
-    bool nextSave = true;
+    bool _nextPositionSave = true;
 
     Vector2 _lastPosition;
+
+#region  Boundary Points
+
+    float minX = -2.2f;
+    float maxX = 2.2f;
+    float minY = -4.2f;
+    float maxY = 4.2f;
+
+#endregion
+
     void OnEnable()
     {
-        EventManager.onClickBody += BodyAnimationController;
+        EventManager.onClickBody += AnimationController;
     }
     void OnDisable()
     {
-        EventManager.onClickBody -= BodyAnimationController;
-    }
-    void Awake()
-    {
-        anim = GetComponent<Animator>();
-        _bodySpring = GetComponent<SpringJoint2D>(); 
-        _bodySpring.connectedAnchor = gameObject.transform.position;
+        EventManager.onClickBody -= AnimationController;
     }
 
     void Update()
     {
-        BoundaryCheck();
-        if(nextSave)
+        BoundaryChecker.boundaryChecker.BoundaryCheck(gameObject.transform,maxX,minX,maxY,minY);
+
+        if(_nextPositionSave)
         {
-            StartCoroutine(Save_LastPosition());
+            SaveLastPosition();
         }
     }
 
@@ -39,77 +40,43 @@ public class Body : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Ball"))
         {
-            CrushAnimation();
-            StartCoroutine(StopCrushAnimRoutine());
+            BodyAnimations.anims.CrushAnimation();
+           BodyAnimations.anims.StopCrushAnim();
             Debug.Log("crush happened with " + other.gameObject.name);
         }
     }
 
-    void OnMouseDrag()        
-    {
-        Vector2 cursorPosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-        _bodySpring.connectedAnchor = cursorPosition;
-    }
-
     void OnMouseUp()
     {
-        IdleAnimation();
+        BodyAnimations.anims.IdleAnimation();
     }
-    
-    void BodyAnimationController()
+
+#region Animation Controller
+
+    void AnimationController()
     {
         if((_lastPosition.x - transform.position.x) < 0)
-            MoveLeftAnimation();
+            BodyAnimations.anims.MoveLeftAnimation();
         else if((_lastPosition.x - transform.position.x) > 0)
-            MoveRightAnimation();
-    }
-
-    public void MoveRightAnimation()
-    {
-        anim.SetBool("MoveLeft",true);
-        anim.SetBool("MoveRight",false);
-    }
-    public void MoveLeftAnimation()
-    {
-        anim.SetBool("MoveLeft",false);
-        anim.SetBool("MoveRight",true);
-    }
-
-    public void CrushAnimation()
-    {
-        anim.SetBool("IsCrush",true);
-    }
-
-    public void IdleAnimation()
-    {
-        anim.SetBool("MoveLeft",false);
-        anim.SetBool("MoveRight",false);
+            BodyAnimations.anims.MoveRightAnimation();
+        else
+            BodyAnimations.anims.IdleAnimation();
     }
     
 
-    IEnumerator StopCrushAnimRoutine()
+#endregion
+
+    void SaveLastPosition()
     {
-        yield return new WaitForSeconds(0.2f);
-        anim.SetBool("IsCrush",false);
+        StartCoroutine(SaveLastPositionRoutine());
     }
 
-     IEnumerator Save_LastPosition()
+     IEnumerator SaveLastPositionRoutine()
     {
-        nextSave = false;
+        _nextPositionSave = false;
         _lastPosition = transform.position;
         yield return new WaitForEndOfFrame();
-        nextSave = true;
+        _nextPositionSave = true;
     }
 
-    void BoundaryCheck()
-    {
-        if(transform.position.x > 2.2f)
-            transform.position = new Vector2(2.2f, transform.position.y);
-        if(transform.position.x < -2.2f)
-            transform.position = new Vector2(-2.2f, transform.position.y);
-        if(transform.position.y > 4.2f)
-            transform.position = new Vector2(transform.position.x,4.2f);
-        if(transform.position.y < -4.2f)
-            transform.position = new Vector2(transform.position.x,-4.2f);
-    }
 }
