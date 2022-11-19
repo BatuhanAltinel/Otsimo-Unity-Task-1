@@ -4,97 +4,87 @@ using UnityEngine;
 
 public class Body : MonoBehaviour
 {
-    SpringJoint2D _bodySpring;
-
-    Animator anim;
-
-    bool nextSave = true;
-
     Vector2 _lastPosition;
+    Dragger dragger;
+    BoundaryChecker boundaryChecker;
+
+#region  Boundary Points
+
+    float minX = -2.2f;
+    float maxX = 2.2f;
+    float minY = -4.2f;
+    float maxY = 4.2f;
+
+#endregion
+
+
+    void Awake()
+    {
+        dragger = GetComponent<Dragger>();
+        boundaryChecker = GetComponent<BoundaryChecker>();
+    }
     void OnEnable()
     {
-        EventManager.onClickBody += BodyAnimationController;
+        EventManager.onClickBody += AnimationController;
+        EventManager.onClickBody += SaveLastPosition;
+        EventManager.onClickBody += BodySpringPositioning;
     }
     void OnDisable()
     {
-        EventManager.onClickBody -= BodyAnimationController;
+        EventManager.onClickBody -= AnimationController;
+        EventManager.onClickBody -= SaveLastPosition;
+        EventManager.onClickBody -= BodySpringPositioning;
     }
-    void Awake()
-    {
-        anim = GetComponent<Animator>();
-        _bodySpring = GetComponent<SpringJoint2D>(); 
-        _bodySpring.connectedAnchor = gameObject.transform.position;
-    }
-
+    
     void Update()
     {
-        if(nextSave)
-        {
-            StartCoroutine(Save_LastPosition());
-        }
+       boundaryChecker.BoundaryCheck(gameObject.transform,maxX,minX,maxY,minY);
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if(other.gameObject.CompareTag("Ball"))
         {
-            CrushAnimation();
-            StartCoroutine(StopCrushAnimRoutine());
-            Debug.Log("crush happened with " + other.gameObject.name);
+            BodyAnimations.anims.CrushAnimation();
+            BodyAnimations.anims.StopCrushAnim();
         }
     }
 
-    void OnMouseDrag()        
+    void OnMouseUp()
     {
-        Vector2 cursorPosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-        _bodySpring.connectedAnchor = cursorPosition;
+        BodyAnimations.anims.IdleAnimation();
     }
 
-    void BodyAnimationController()
+    void BodySpringPositioning()
+    {
+        SpringJoint2D _bodySpring = gameObject.GetComponent<SpringJoint2D>();
+        _bodySpring.connectedAnchor = dragger.GetMousePosition();
+    }
+
+#region Animation Controller
+
+    void AnimationController()
     {
         if((_lastPosition.x - transform.position.x) < 0)
-            MoveLeftAnimation();
+            BodyAnimations.anims.MoveLeftAnimation();
         else if((_lastPosition.x - transform.position.x) > 0)
-            MoveRightAnimation();
+            BodyAnimations.anims.MoveRightAnimation();
         else
-            IdleAnimation();
-    }
-
-    public void MoveRightAnimation()
-    {
-        anim.SetBool("MoveLeft",true);
-        anim.SetBool("MoveRight",false);
-    }
-    public void MoveLeftAnimation()
-    {
-        anim.SetBool("MoveLeft",false);
-        anim.SetBool("MoveRight",true);
-    }
-
-    public void CrushAnimation()
-    {
-        anim.SetBool("IsCrush",true);
-    }
-
-    public void IdleAnimation()
-    {
-        anim.SetBool("MoveLeft",false);
-        anim.SetBool("MoveRight",false);
+            BodyAnimations.anims.IdleAnimation();
     }
     
 
-    IEnumerator StopCrushAnimRoutine()
+#endregion
+
+    void SaveLastPosition()
     {
-        yield return new WaitForSeconds(0.2f);
-        anim.SetBool("IsCrush",false);
+        StartCoroutine(SaveLastPositionRoutine());
     }
 
-     IEnumerator Save_LastPosition()
+     IEnumerator SaveLastPositionRoutine()
     {
-        nextSave = false;
+        yield return new WaitForEndOfFrame();
         _lastPosition = transform.position;
-        yield return new WaitForSeconds(0.05f);
-        nextSave = true;
     }
 
 }

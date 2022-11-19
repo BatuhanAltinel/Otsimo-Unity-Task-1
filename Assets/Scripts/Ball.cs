@@ -5,76 +5,78 @@ using DG.Tweening;
 
 public class Ball : MonoBehaviour
 {
-    Vector2 lastPosition;
-    [SerializeField] float saveDelay = 0.2f;
-    [SerializeField] float _moveSpeed = 5f;
-    bool nextSave = true;
-    
-    Rigidbody2D _ballRB;
-    
+    Rigidbody2D ballRb;
     Dragger dragger;
-    public float animationDuration = 0.5f;
+    BoundaryChecker boundaryChecker;
+
+    [SerializeField] float _moveSpeed = 5f;
+
+    [SerializeField] float _animationDuration = 0.5f;
+
+    [SerializeField] float _animScaleSizeX = 0.017f;
+    [SerializeField] float _animScaleSizeY = 0.022f;
+    [SerializeField] float _normalScaleSize = 0.022f;
+    
+
+#region Boundary Points
+
+    float maxX = 2.3f;
+    float minX = -2.3f;
+    float maxY = 4.5f;
+    float minY = -4.5f;
+
+#endregion
+
+
     void OnEnable()
     {
         EventManager.onClickBall += BallAnimationStart;
-        EventManager.onClickBall += BallAnimationStop;
     }
     void OnDisable()
     {
         EventManager.onClickBall -= BallAnimationStart;
-        EventManager.onClickBall -= BallAnimationStop;
     }
-    void Start()
+    void Awake()
     {
-        lastPosition = transform.position;
-        _ballRB = GetComponent<Rigidbody2D>();
+        ballRb = GetComponent<Rigidbody2D>();
         dragger = GetComponent<Dragger>();
+        boundaryChecker = GetComponent<BoundaryChecker>();
     }
     
     void Update()
     {
-        if (nextSave)
-        {
-            StartCoroutine("SaveLastPosition");
-        }
+        boundaryChecker.BoundaryCheck(gameObject.transform,maxX,minX,maxY,minY);
     }
 
-    void OnMouseUp()
-    {
-        dragger.canBePushed = true;
-        BallAnimationStop();
-    }
-    
     void FixedUpdate()
     {
-        if (dragger.canBePushed)
+        if (dragger._canThrow)
         {
-            dragger.canBePushed = false;
-            _ballRB.velocity = (dragger.GetMousePosition() - transform.position) * _moveSpeed;
+            dragger._canThrow = false;
+            ballRb.velocity = (dragger.GetMousePosition() - transform.position) * _moveSpeed;
         }
     }
- 
-    IEnumerator SaveLastPosition()
+    
+    void OnMouseUp()
     {
-        if(dragger.canBePushed)
-        {
-            nextSave = false;
-            lastPosition = transform.position;
-            yield return new WaitForSeconds(saveDelay);
-            nextSave = true;
-        }
-        
+        BallAnimationStop();
+        dragger._canThrow = true;
     }
 
+#region  Ball Animations
     void BallAnimationStart()
     {
-        transform.DOScaleY(0.02f,animationDuration).SetEase(Ease.InOutBounce).SetLoops(-1,LoopType.Yoyo);
-        Debug.Log("Ball event worked");
+        transform.DOScaleY(_animScaleSizeY,_animationDuration).SetEase(Ease.InOutBounce);
+        transform.DOScaleX(_animScaleSizeX,_animationDuration).SetEase(Ease.InOutBounce);
+        ballRb.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
     void BallAnimationStop()
     {
-        transform.DOScaleY(0.017f,0.5f).SetEase(Ease.InOutBounce);
+        transform.DOScale(_normalScaleSize,_animationDuration).SetEase(Ease.InOutBounce);
+        ballRb.constraints = RigidbodyConstraints2D.None;
     }
+
+#endregion
 
 }
