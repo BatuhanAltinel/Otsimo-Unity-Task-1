@@ -5,12 +5,18 @@ using DG.Tweening;
 
 public class Ball : MonoBehaviour
 {
-    [SerializeField] float _moveSpeed = 5f;
-    
-    Rigidbody2D _ballRb;
-    
+    Rigidbody2D ballRb;
     Dragger dragger;
-    [SerializeField] float animationDuration = 0.5f;
+    BoundaryChecker boundaryChecker;
+
+    [SerializeField] float _moveSpeed = 5f;
+
+    [SerializeField] float _animationDuration = 0.5f;
+
+    [SerializeField] float _animScaleSizeX = 0.017f;
+    [SerializeField] float _animScaleSizeY = 0.022f;
+    [SerializeField] float _normalScaleSize = 0.022f;
+    
 
 #region Boundary Points
 
@@ -30,15 +36,16 @@ public class Ball : MonoBehaviour
     {
         EventManager.onClickBall -= BallAnimationStart;
     }
-    void Start()
+    void Awake()
     {
-        _ballRb = GetComponent<Rigidbody2D>();
+        ballRb = GetComponent<Rigidbody2D>();
         dragger = GetComponent<Dragger>();
+        boundaryChecker = GetComponent<BoundaryChecker>();
     }
     
     void Update()
     {
-        BoundaryChecker.boundaryChecker.BoundaryCheck(gameObject.transform,maxX,minX,maxY,minY);
+        boundaryChecker.BoundaryCheck(gameObject.transform,maxX,minX,maxY,minY);
     }
 
     void FixedUpdate()
@@ -46,7 +53,7 @@ public class Ball : MonoBehaviour
         if (dragger._canThrow)
         {
             dragger._canThrow = false;
-            _ballRb.velocity = (dragger.GetMousePosition() - transform.position) * _moveSpeed;
+            ballRb.velocity = (dragger.GetMousePosition() - transform.position) * _moveSpeed;
         }
     }
     
@@ -59,12 +66,15 @@ public class Ball : MonoBehaviour
 #region  Ball Animations
     void BallAnimationStart()
     {
-        transform.DOScaleY(0.017f,animationDuration).SetEase(Ease.InOutBounce);
+        transform.DOScaleY(_animScaleSizeY,_animationDuration).SetEase(Ease.InOutBounce);
+        transform.DOScaleX(_animScaleSizeX,_animationDuration).SetEase(Ease.InOutBounce);
+        ballRb.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
     void BallAnimationStop()
     {
-        transform.DOScaleY(0.02f,animationDuration).SetEase(Ease.InOutBounce);
+        transform.DOScale(_normalScaleSize,_animationDuration).SetEase(Ease.InOutBounce);
+        ballRb.constraints = RigidbodyConstraints2D.None;
     }
 
 #endregion

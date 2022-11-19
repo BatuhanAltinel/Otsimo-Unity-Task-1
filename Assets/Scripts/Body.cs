@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Body : MonoBehaviour
 {
-    bool _nextPositionSave = true;
-
     Vector2 _lastPosition;
+    Dragger dragger;
+    BoundaryChecker boundaryChecker;
 
 #region  Boundary Points
 
@@ -17,23 +17,28 @@ public class Body : MonoBehaviour
 
 #endregion
 
+
+    void Awake()
+    {
+        dragger = GetComponent<Dragger>();
+        boundaryChecker = GetComponent<BoundaryChecker>();
+    }
     void OnEnable()
     {
         EventManager.onClickBody += AnimationController;
+        EventManager.onClickBody += SaveLastPosition;
+        EventManager.onClickBody += BodySpringPositioning;
     }
     void OnDisable()
     {
         EventManager.onClickBody -= AnimationController;
+        EventManager.onClickBody -= SaveLastPosition;
+        EventManager.onClickBody -= BodySpringPositioning;
     }
-
+    
     void Update()
     {
-        BoundaryChecker.boundaryChecker.BoundaryCheck(gameObject.transform,maxX,minX,maxY,minY);
-
-        if(_nextPositionSave)
-        {
-            SaveLastPosition();
-        }
+       boundaryChecker.BoundaryCheck(gameObject.transform,maxX,minX,maxY,minY);
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -41,14 +46,19 @@ public class Body : MonoBehaviour
         if(other.gameObject.CompareTag("Ball"))
         {
             BodyAnimations.anims.CrushAnimation();
-           BodyAnimations.anims.StopCrushAnim();
-            Debug.Log("crush happened with " + other.gameObject.name);
+            BodyAnimations.anims.StopCrushAnim();
         }
     }
 
     void OnMouseUp()
     {
         BodyAnimations.anims.IdleAnimation();
+    }
+
+    void BodySpringPositioning()
+    {
+        SpringJoint2D _bodySpring = gameObject.GetComponent<SpringJoint2D>();
+        _bodySpring.connectedAnchor = dragger.GetMousePosition();
     }
 
 #region Animation Controller
@@ -73,10 +83,8 @@ public class Body : MonoBehaviour
 
      IEnumerator SaveLastPositionRoutine()
     {
-        _nextPositionSave = false;
-        _lastPosition = transform.position;
         yield return new WaitForEndOfFrame();
-        _nextPositionSave = true;
+        _lastPosition = transform.position;
     }
 
 }

@@ -5,9 +5,10 @@ using UnityEngine;
 public class BodyAnimations : MonoBehaviour
 {
     public static BodyAnimations anims;
+    float crushAnimDelayTime = 0.2f;
     Animator anim;
     
-    // Start is called before the first frame update
+    
     void Awake()
     {
         if(anims == null)
@@ -47,7 +48,7 @@ public class BodyAnimations : MonoBehaviour
     }
     IEnumerator StopCrushAnimRoutine()
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(crushAnimDelayTime);
         anim.SetBool("IsCrush",false);
     }
     #endregion

@@ -4,15 +4,6 @@ using UnityEngine;
 
 public class BoundaryChecker : MonoBehaviour
 {
-    public static BoundaryChecker boundaryChecker;
-    
-    void Awake()
-    {
-        if(boundaryChecker == null)
-            boundaryChecker = this;
-        else
-            Destroy(gameObject);
-    }
 
     public void BoundaryCheck(Transform transform,float maxX,float minX,float maxY,float minY)
     {

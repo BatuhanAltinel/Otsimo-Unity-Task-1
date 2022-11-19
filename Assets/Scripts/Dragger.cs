@@ -17,34 +17,28 @@ public class Dragger : MonoBehaviour
     private void OnMouseDown() 
     {
         _dragOffset = transform.position - GetMousePosition();
+        _canThrow = false;
+
         if(gameObject.CompareTag("Ball"))
             EventManager.onClickBall.Invoke();
         
-        _canThrow = false;
     }
+    
     private void OnMouseDrag() 
     {
-        transform.position =Vector3.MoveTowards(transform.position,GetMousePosition() + _dragOffset,_speed*Time.deltaTime);
+        transform.position =Vector3.MoveTowards
+                            (transform.position,GetMousePosition() + _dragOffset,_speed*Time.deltaTime);
        
         if(gameObject.CompareTag("Body"))
-        {
             EventManager.onClickBody.Invoke();
-            BodySpringPositioning();
-        }
           
     }
 
     public Vector3 GetMousePosition()
     {
-        var mousePos = _cam.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mousePos = _cam.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = 0;
         return mousePos;
-    }
-
-    void BodySpringPositioning()
-    {
-        SpringJoint2D _bodySpring = gameObject.GetComponent<SpringJoint2D>();
-        _bodySpring.connectedAnchor = GetMousePosition();
     }
     
 }
