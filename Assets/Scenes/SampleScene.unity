@@ -1411,9 +1411,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveSpeed: 7
   _animationDuration: 0.5
-  _animScaleSizeX: 0.017
-  _animScaleSizeY: 0.022
-  _normalScaleSize: 0.022
+  _animScaleSizeX: 0.022
+  _animScaleSizeY: 0.017
+  _normalScaleSize: 0.02
 --- !u!58 &1152957553
 CircleCollider2D:
   m_ObjectHideFlags: 0

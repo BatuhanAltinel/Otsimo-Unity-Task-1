@@ -13,9 +13,9 @@ public class Ball : MonoBehaviour
 
     [SerializeField] float _animationDuration = 0.5f;
 
-    [SerializeField] float _animScaleSizeX = 0.017f;
-    [SerializeField] float _animScaleSizeY = 0.022f;
-    [SerializeField] float _normalScaleSize = 0.022f;
+    [SerializeField] float _animScaleSizeX = 0.022f;
+    [SerializeField] float _animScaleSizeY = 0.017f;
+    [SerializeField] float _normalScaleSize = 0.02f;
     
 
 #region Boundary Points
